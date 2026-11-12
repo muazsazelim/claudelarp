@@ -1,0 +1,18 @@
+{
+  "manifest_version": 3,
+  "name": "Claude Theme",
+  "version": "1.0",
+  "description": "Custom background image and font for claude.ai",
+  "permissions": ["storage", "unlimitedStorage"],
+  "content_scripts": [
+    {
+      "matches": ["https://claude.ai/*"],
+      "js": ["content.js"],
+      "run_at": "document_start"
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Claude Theme"
+  }
+}

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      body {
+        width: 280px;
+        padding: 12px;
+        font-family: system-ui, sans-serif;
+        font-size: 14px;
+      }
+      label {
+        display: block;
+        margin-top: 12px;
+        font-weight: 600;
+      }
+      input[type="text"],
+      input[type="file"] {
+        width: 100%;
+        box-sizing: border-box;
+        margin-top: 4px;
+      }
+      input[type="range"] {
+        width: 100%;
+      }
+      button {
+        margin-top: 12px;
+        padding: 6px 10px;
+        cursor: pointer;
+      }
+      #preview {
+        width: 100%;
+        height: 80px;
+        margin-top: 8px;
+        background-size: cover;
+        background-position: center;
+        border: 1px solid #ccc;
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <label>Background image</label>
+    <input type="file" id="file" accept="image/*" />
+    <div id="preview"></div>
+
+    <label>Opacity: <span id="opVal">15</span>%</label>
+    <input type="range" id="opacity" min="0" max="100" value="15" />
+
+    <label>Font (installed on your computer)</label>
+    <input type="text" id="font" placeholder="e.g. Georgia" />
+
+    <label>Font file (.ttf, .otf, .woff, .woff2)</label>
+    <input type="file" id="fontFile" accept=".ttf,.otf,.woff,.woff2" />
+    <div id="fontFileName" style="font-size: 12px; color: #666"></div>
+
+    <label style="font-weight: normal">
+      <input type="checkbox" id="codeFont" checked /> Apply font to code too
+    </label>
+
+    <label>
+      <input type="checkbox" id="tbOn" /> Custom text brightness:
+      <span id="tbVal">0</span>%
+    </label>
+    <input type="range" id="tb" min="0" max="100" value="0" disabled />
+    <div style="font-size: 12px; color: #666">0 = black, 100 = white</div>
+
+    <button id="clearImg">Remove image</button>
+    <button id="clearFont">Remove font file</button>
+    <button id="reset">Reset all</button>
+
+    <script src="popup.js"></script>
+  </body>
+</html>
