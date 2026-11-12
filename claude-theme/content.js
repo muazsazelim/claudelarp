@@ -33,7 +33,26 @@ async function syncFontFile(dataUrl) {
   }
 }
 
+// The image overlay sits above the page, so a plain overlay would hide text and
+// borders at high opacity. Blending keeps the foreground intact instead:
+//   light page -> "multiply": dark text/borders stay dark, light background shows the image
+//   dark page  -> "screen":   light text/borders stay light, dark background shows the image
+function isDarkPage() {
+  for (const el of [document.body, document.documentElement]) {
+    if (!el) continue;
+    const m = getComputedStyle(el).backgroundColor.match(
+      /rgba?\(\s*([\d.]+)[,\s]+([\d.]+)[,\s]+([\d.]+)(?:[,\s/]+([\d.]+%?))?/
+    );
+    if (!m) continue;
+    const a = m[4] === undefined ? 1 : m[4].endsWith("%") ? parseFloat(m[4]) / 100 : +m[4];
+    if (a < 0.5) continue; // transparent, look at the parent
+    return 0.2126 * m[1] + 0.7152 * m[2] + 0.0722 * m[3] < 128;
+  }
+  return matchMedia("(prefers-color-scheme: dark)").matches;
+}
+
 function apply(s) {
+  lastSettings = s;
   // ----- Background image -----
   let bg = document.getElementById(BG_ID);
   if (s.image) {
@@ -49,6 +68,7 @@ function apply(s) {
       z-index: 2147483647;
       background: url("${s.image}") center / cover no-repeat;
       opacity: ${s.opacity};
+      mix-blend-mode: ${isDarkPage() ? "screen" : "multiply"};
     `;
   } else if (bg) {
     bg.remove();
@@ -100,4 +120,13 @@ chrome.storage.local.get(DEFAULTS, apply);
 
 chrome.storage.onChanged.addListener(() => {
   chrome.storage.local.get(DEFAULTS, apply);
+});
+
+// Re-pick the blend mode when the site switches between light and dark.
+let lastSettings = null;
+const rethemeSoon = () => lastSettings && apply(lastSettings);
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change", rethemeSoon);
+new MutationObserver(rethemeSoon).observe(document.documentElement, {
+  attributes: true,
+  attributeFilter: ["class", "data-theme", "data-mode", "style"],
 });
