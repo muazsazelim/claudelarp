@@ -9,6 +9,7 @@ A small Chrome extension that lets you restyle [claude.ai](https://claude.ai) wi
 - **Background image**: upload any image; it's drawn as a fixed layer with adjustable opacity.
 - **Font**: type the name of a font installed on your computer, or **upload a font file** (`.ttf`, `.otf`, `.woff`, `.woff2`) such as a Minecraft font.
 - **Apply font to code**: optionally use your font in code blocks and inline code too.
+- **Theme color**: pick a preset (Blossom Pink, Ocean Blue, Moss Green, ...) and the sidebar, selected chat, cards, input box, text, borders and accents all follow it. The page background and your image are left alone.
 - **Custom text brightness**: force text to a grey from black to white, handy when a light background makes text hard to read.
 - Everything saves automatically and applies live, with one-click **Remove image**, **Remove font file** and **Reset all**.
 
@@ -47,6 +48,7 @@ claudelarp/
 | **Font (installed on your computer)** | Type an installed font's exact name, e.g. `Georgia` or `Comic Sans MS`. |
 | **Font file** | Upload a font file. It takes priority over the typed font, which becomes the fallback for missing characters. |
 | **Apply font to code too** | On by default. Untick to keep code blocks in monospace. |
+| **Theme color** | Click a swatch to recolor the UI. "Default" (striped) restores Claude's own colors. |
 | **Custom text brightness** | Tick the box, then drag the slider (0 = black, 100 = white). Code syntax colors are left alone. |
 
 Use a low brightness value on light backgrounds and a high one on dark backgrounds.

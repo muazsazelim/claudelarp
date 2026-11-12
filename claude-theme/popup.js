@@ -7,7 +7,43 @@ const DEFAULTS = {
   fontFileName: "",
   codeFont: true,
   textBrightness: -1,
+  themeColor: "",
 };
+
+// Theme presets: each is one base color; content.js expands it into a full palette.
+// "Default" (empty) leaves Claude's own colors alone.
+const PRESETS = [
+  ["Default", ""],
+  ["Blossom Pink", "#f4a6c8"],
+  ["Brick Red", "#f0a3a0"],
+  ["Pumpkin Orange", "#f7c08a"],
+  ["Moss Green", "#b5d19a"],
+  ["Emerald Green", "#9fdcc0"],
+  ["Turquoise Blue", "#9fdde6"],
+  ["Ocean Blue", "#a8c8f0"],
+  ["Ash Gray", "#c4c8d0"],
+];
+
+function showTheme(value) {
+  for (const b of $("swatches").children) {
+    b.classList.toggle("selected", b.dataset.hex === (value || ""));
+  }
+}
+
+function setTheme(value) {
+  showTheme(value);
+  chrome.storage.local.set({ themeColor: value });
+}
+
+for (const [name, hex] of PRESETS) {
+  const b = document.createElement("button");
+  b.className = hex ? "swatch" : "swatch none";
+  b.title = name;
+  b.dataset.hex = hex;
+  if (hex) b.style.background = hex;
+  b.addEventListener("click", () => setTheme(hex));
+  $("swatches").appendChild(b);
+}
 
 function showFontFile(name) {
   $("fontFileName").textContent = name ? `Using: ${name}` : "";
@@ -39,6 +75,7 @@ chrome.storage.local.get(DEFAULTS, (s) => {
   showTextBrightness(s.textBrightness);
   showFontFile(s.fontFileName);
   $("codeFont").checked = s.codeFont;
+  showTheme(s.themeColor);
   showPreview(s.image);
 });
 
@@ -124,6 +161,7 @@ $("reset").addEventListener("click", () => {
   $("font").value = "";
   showTextBrightness(-1);
   showFontFile("");
+  showTheme("");
   $("codeFont").checked = true;
   $("fontFile").value = "";
   $("file").value = "";
